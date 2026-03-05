@@ -114,4 +114,3 @@ class DBHealthCheckerPlugin:
         }
 
 
-PLUGIN_CLASS = DBHealthCheckerPlugin

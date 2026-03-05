@@ -83,7 +83,7 @@ class DigestGeneratorPlugin:
                 ],
             }
             try:
-                new_page = client._call(client._client.pages.create, **new_page_data)
+                new_page = client.create_page(**new_page_data)
                 created_page_id = new_page.get("id")
             except Exception as exc:
                 return {
@@ -104,4 +104,3 @@ class DigestGeneratorPlugin:
         }
 
 
-PLUGIN_CLASS = DigestGeneratorPlugin

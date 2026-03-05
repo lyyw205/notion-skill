@@ -50,4 +50,3 @@ class MeetingSummarizerPlugin:
         }
 
 
-PLUGIN_CLASS = MeetingSummarizerPlugin

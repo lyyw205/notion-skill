@@ -64,7 +64,7 @@ class WeeklyReviewPlugin:
 
         if create_page and parent_page_id:
             try:
-                page = client._client.pages.create(
+                page = client.create_page(
                     parent={"page_id": parent_page_id},
                     properties={
                         "title": {
@@ -99,4 +99,3 @@ class WeeklyReviewPlugin:
         }
 
 
-PLUGIN_CLASS = WeeklyReviewPlugin

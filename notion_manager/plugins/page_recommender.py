@@ -75,4 +75,3 @@ class PageRecommenderPlugin:
         }
 
 
-PLUGIN_CLASS = PageRecommenderPlugin

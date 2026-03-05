@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 import time
 from typing import Any
 
@@ -77,6 +76,17 @@ class NotionClient:
         return self._call(
             self._client.pages.update, page_id=page_id, properties=properties
         )
+
+    def create_page(
+        self,
+        parent: dict[str, Any],
+        properties: dict[str, Any],
+        children: list[dict[str, Any]] | None = None,
+    ) -> dict[str, Any]:
+        kwargs: dict[str, Any] = {"parent": parent, "properties": properties}
+        if children:
+            kwargs["children"] = children
+        return self._call(self._client.pages.create, **kwargs)
 
     def append_blocks(self, page_id: str, blocks: list[dict[str, Any]]) -> dict[str, Any]:
         return self._call(

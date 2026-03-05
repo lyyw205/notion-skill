@@ -109,4 +109,3 @@ class ProjectSummarizerPlugin:
         }
 
 
-PLUGIN_CLASS = ProjectSummarizerPlugin

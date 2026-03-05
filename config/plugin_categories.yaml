@@ -1,0 +1,86 @@
+categories:
+  content-ai:
+    label: "Content AI"
+    icon: "brain"
+    plugins:
+      - summarizer
+      - tagger
+      - content_expander
+      - bullet_converter
+      - translator
+      - sentiment_analyzer
+      - meeting_summarizer
+
+  search-discovery:
+    label: "Search & Discovery"
+    icon: "search"
+    plugins:
+      - search
+      - semantic_search
+      - cross_page_qa
+      - page_recommender
+
+  workspace-health:
+    label: "Workspace Health"
+    icon: "shield"
+    plugins:
+      - duplicate_detector
+      - empty_detector
+      - orphan_detector
+      - db_health_checker
+      - page_quality_checker
+      - workspace_health_dashboard
+      - hierarchy_optimizer
+
+  automation:
+    label: "Automation"
+    icon: "gear"
+    plugins:
+      - auto_archiver
+      - auto_sorter
+      - bulk_updater
+      - recurring_task_generator
+      - content_scheduler
+      - property_normalizer
+      - relation_linker
+
+  analytics:
+    label: "Analytics"
+    icon: "chart"
+    plugins:
+      - task_analyzer
+      - usage_analyzer
+      - keyword_analyzer
+      - content_graph
+      - writing_habit_analyzer
+      - db_stats
+      - goal_tracker
+
+  reporting:
+    label: "Reporting"
+    icon: "report"
+    plugins:
+      - digest_generator
+      - project_summarizer
+      - status_reporter
+      - deadline_alerter
+      - changelog_tracker
+      - release_notes
+
+  templates:
+    label: "Templates"
+    icon: "template"
+    plugins:
+      - template_generator
+      - daily_journal
+      - meeting_template
+      - weekly_review
+      - faq_generator
+      - reading_notes
+
+  backup:
+    label: "Backup & Merge"
+    icon: "archive"
+    plugins:
+      - backup
+      - page_merger

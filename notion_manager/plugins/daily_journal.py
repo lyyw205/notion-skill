@@ -18,7 +18,7 @@ class DailyJournalPlugin:
         today = datetime.date.today().isoformat()
 
         try:
-            page = client._client.pages.create(
+            page = client.create_page(
                 parent={"page_id": parent_page_id},
                 properties={
                     "title": {
@@ -98,4 +98,3 @@ class DailyJournalPlugin:
         }
 
 
-PLUGIN_CLASS = DailyJournalPlugin

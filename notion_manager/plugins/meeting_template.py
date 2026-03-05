@@ -116,7 +116,7 @@ class MeetingTemplatePlugin:
         })
 
         try:
-            page = client._client.pages.create(
+            page = client.create_page(
                 parent={"page_id": parent_page_id},
                 properties={
                     "title": {
@@ -134,4 +134,3 @@ class MeetingTemplatePlugin:
         }
 
 
-PLUGIN_CLASS = MeetingTemplatePlugin

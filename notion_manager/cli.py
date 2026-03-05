@@ -395,24 +395,191 @@ def plugins_group() -> None:
 
 
 @plugins_group.command("list")
+@click.option("--category", default=None, help="Filter by category name.")
+@click.option("--format", "fmt", default="text", type=click.Choice(["text", "json"]), help="Output format.")
 @click.pass_context
-def plugins_list(ctx: click.Context) -> None:
-    """List all discovered plugins."""
+def plugins_list(ctx: click.Context, category: str | None, fmt: str) -> None:
+    """List all discovered plugins grouped by category."""
+    from notion_manager.plugin_state import load_effective_plugins
+
+    cfg = load_config(ctx.obj["config_path"])
     registry = PluginRegistry()
     registry._autodiscover()
-    names = registry.list_plugins()
+    effective = set(load_effective_plugins(cfg))
+    categories = registry.get_categories()
 
-    if not names:
+    if fmt == "json":
+        data: list[dict[str, Any]] = []
+        for name in registry.list_plugins():
+            meta = registry.get_meta(name)
+            if category and (not meta or meta.category != category):
+                continue
+            data.append({
+                "name": name,
+                "description": meta.description if meta else "",
+                "category": meta.category if meta else "uncategorized",
+                "enabled": name in effective,
+            })
+        click.echo(json.dumps(data, indent=2))
+        return
+
+    # Text output grouped by category
+    cat_order = list(categories.keys())
+    plugins_by_cat: dict[str, list[str]] = {}
+    for name in registry.list_plugins():
+        meta = registry.get_meta(name)
+        cat = meta.category if meta else "uncategorized"
+        if category and cat != category:
+            continue
+        plugins_by_cat.setdefault(cat, []).append(name)
+
+    if not plugins_by_cat:
         click.echo(click.style("No plugins found.", fg="yellow"))
         return
 
-    click.echo(click.style(f"Found {len(names)} plugin(s):\n", fg="green", bold=True))
-    for name in names:
-        cls = registry.get(name)
-        description = getattr(cls, "description", "") if cls else ""
+    total = sum(len(v) for v in plugins_by_cat.values())
+    click.echo(click.style(f"Found {total} plugin(s):\n", fg="green", bold=True))
+
+    for cat_key in cat_order:
+        if cat_key not in plugins_by_cat:
+            continue
+        cat_data = categories.get(cat_key, {})
+        label = cat_data.get("label", cat_key)
+        click.echo(click.style(f"  [{label}]", fg="magenta", bold=True))
+        for name in sorted(plugins_by_cat[cat_key]):
+            meta = registry.get_meta(name)
+            status = click.style("[ON]", fg="green") if name in effective else click.style("[OFF]", fg="red")
+            desc = meta.description if meta else ""
+            click.echo(f"    {status} {click.style(name, fg='cyan', bold=True)}" + (f"  — {desc}" if desc else ""))
+        click.echo()
+
+    # uncategorized
+    if "uncategorized" in plugins_by_cat:
+        click.echo(click.style("  [Uncategorized]", fg="magenta", bold=True))
+        for name in sorted(plugins_by_cat["uncategorized"]):
+            meta = registry.get_meta(name)
+            status = click.style("[ON]", fg="green") if name in effective else click.style("[OFF]", fg="red")
+            desc = meta.description if meta else ""
+            click.echo(f"    {status} {click.style(name, fg='cyan', bold=True)}" + (f"  — {desc}" if desc else ""))
+
+
+@plugins_group.command("enable")
+@click.argument("name")
+def plugins_enable(name: str) -> None:
+    """Enable a plugin (persisted to data/plugin_state.json)."""
+    from notion_manager.plugin_state import toggle_plugin
+    toggle_plugin(name, True)
+    click.echo(click.style(f"Plugin '{name}' enabled.", fg="green"))
+
+
+@plugins_group.command("disable")
+@click.argument("name")
+def plugins_disable(name: str) -> None:
+    """Disable a plugin (persisted to data/plugin_state.json)."""
+    from notion_manager.plugin_state import toggle_plugin
+    toggle_plugin(name, False)
+    click.echo(click.style(f"Plugin '{name}' disabled.", fg="yellow"))
+
+
+@plugins_group.command("info")
+@click.argument("name")
+def plugins_info(name: str) -> None:
+    """Show detailed info for a plugin."""
+    from notion_manager.execution_tracker import ExecutionTracker
+
+    registry = PluginRegistry()
+    registry._autodiscover()
+    meta = registry.get_meta(name)
+    if not meta:
+        click.echo(click.style(f"Plugin '{name}' not found.", fg="red"), err=True)
+        return
+
+    click.echo(click.style(f"Plugin: {meta.name}", fg="cyan", bold=True))
+    click.echo(f"  Description : {meta.description}")
+    click.echo(f"  Category    : {meta.category}")
+    click.echo(f"  Requires AI : {meta.requires_ai}")
+    click.echo(f"  Risk Level  : {meta.risk_level}")
+    click.echo(f"  Version     : {meta.version}")
+
+    try:
+        tracker = ExecutionTracker()
+        history = tracker.get_history(name, limit=5)
+        tracker.close()
+        if history:
+            click.echo(click.style("\n  Recent executions:", bold=True))
+            for h in history:
+                status_color = "green" if h["status"] == "success" else "red"
+                click.echo(
+                    f"    {h['started_at'][:19]}  "
+                    f"{click.style(h['status'], fg=status_color)}  "
+                    f"{h.get('duration_ms', 0)}ms"
+                )
+    except Exception:
+        pass
+
+
+@plugins_group.command("run")
+@click.argument("name")
+@click.option("--param", multiple=True, help="key=value parameters.")
+@click.pass_context
+def plugins_run(ctx: click.Context, name: str, param: tuple[str, ...]) -> None:
+    """Execute a plugin directly."""
+    from notion_manager.execution_tracker import ExecutionTracker
+
+    cfg = load_config(ctx.obj["config_path"])
+    registry = PluginRegistry()
+    registry._autodiscover()
+    cls = registry.get(name)
+    if not cls:
+        click.echo(click.style(f"Plugin '{name}' not found.", fg="red"), err=True)
+        return
+
+    kwargs: dict[str, str] = {}
+    for p in param:
+        if "=" not in p:
+            click.echo(click.style(f"Invalid param format: {p} (expected key=value)", fg="red"), err=True)
+            return
+        k, v = p.split("=", 1)
+        kwargs[k] = v
+
+    client = _build_client(cfg)
+    plugin = cls()
+    tracker = ExecutionTracker()
+
+    with tracker.track(name, kwargs) as track_ctx:
+        result = plugin.execute(client, cfg, **kwargs)
+        track_ctx["result"] = result
+
+    tracker.close()
+    click.echo(click.style(f"Plugin '{name}' executed successfully.", fg="green"))
+    click.echo(json.dumps(result, indent=2, default=str))
+
+
+@plugins_group.command("history")
+@click.option("--name", default=None, help="Filter by plugin name.")
+@click.option("--limit", default=20, help="Number of records to show.")
+def plugins_history(name: str | None, limit: int) -> None:
+    """Show plugin execution history."""
+    from notion_manager.execution_tracker import ExecutionTracker
+
+    tracker = ExecutionTracker()
+    history = tracker.get_history(plugin_name=name, limit=limit)
+    tracker.close()
+
+    if not history:
+        click.echo(click.style("No execution history found.", fg="yellow"))
+        return
+
+    click.echo(click.style(f"{'Plugin':<30} {'Status':<10} {'Duration':<12} {'Started At'}", bold=True))
+    click.echo("-" * 80)
+    for h in history:
+        status_color = "green" if h["status"] == "success" else ("red" if h["status"] == "error" else "yellow")
+        dur = f"{h.get('duration_ms', 0)}ms" if h.get("duration_ms") is not None else "—"
         click.echo(
-            f"  {click.style(name, fg='cyan', bold=True)}"
-            + (f"  — {description}" if description else "")
+            f"  {h['plugin_name']:<28} "
+            f"{click.style(h['status'], fg=status_color):<10} "
+            f"{dur:<12} "
+            f"{h['started_at'][:19]}"
         )
 
 

@@ -161,4 +161,3 @@ class TaskAnalyzerPlugin:
         return metrics
 
 
-PLUGIN_CLASS = TaskAnalyzerPlugin

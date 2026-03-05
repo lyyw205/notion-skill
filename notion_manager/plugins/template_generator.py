@@ -92,4 +92,3 @@ class TemplateGeneratorPlugin:
         }
 
 
-PLUGIN_CLASS = TemplateGeneratorPlugin

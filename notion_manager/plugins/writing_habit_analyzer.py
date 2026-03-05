@@ -59,4 +59,3 @@ class WritingHabitAnalyzerPlugin:
         }
 
 
-PLUGIN_CLASS = WritingHabitAnalyzerPlugin

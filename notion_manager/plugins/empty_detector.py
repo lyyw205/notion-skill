@@ -60,4 +60,3 @@ class EmptyDetectorPlugin:
         }
 
 
-PLUGIN_CLASS = EmptyDetectorPlugin

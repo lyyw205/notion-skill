@@ -83,4 +83,3 @@ class BulletConverterPlugin:
         }
 
 
-PLUGIN_CLASS = BulletConverterPlugin

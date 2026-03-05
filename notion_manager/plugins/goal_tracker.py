@@ -110,4 +110,3 @@ class GoalTrackerPlugin:
         }
 
 
-PLUGIN_CLASS = GoalTrackerPlugin

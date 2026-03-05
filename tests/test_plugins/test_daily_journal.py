@@ -12,15 +12,15 @@ class TestDailyJournalPlugin:
         self.config = {}
 
     def test_create_journal(self):
-        """Mock pages.create returning a new page id; verify created_page_id and date."""
+        """Mock create_page returning a new page id; verify created_page_id and date."""
         mock_client = MagicMock()
-        mock_client._client.pages.create.return_value = {"id": "new-page"}
+        mock_client.create_page.return_value = {"id": "new-page"}
 
         result = self.plugin.execute(mock_client, self.config, parent_page_id="parent-123")
 
         assert result.get("created_page_id") == "new-page"
         assert result.get("date") == datetime.date.today().isoformat()
-        mock_client._client.pages.create.assert_called_once()
+        mock_client.create_page.assert_called_once()
 
     def test_missing_parent(self):
         """No parent_page_id should return error."""

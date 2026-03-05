@@ -53,11 +53,11 @@ class TestTranslatorPlugin:
         mock_ai.translate.assert_called_once()
 
     def test_create_page(self):
-        """create_page=True should attempt new page creation via client._call."""
+        """create_page=True should attempt new page creation via client.create_page."""
         mock_client = MagicMock()
         mock_client.get_page.return_value = _make_page("page-tr2")
         mock_client.get_page_blocks.return_value = _make_blocks("한국어 텍스트입니다.")
-        mock_client._call.return_value = {"id": "new-page-id"}
+        mock_client.create_page.return_value = {"id": "new-page-id"}
 
         translated = "This is Korean text."
 
@@ -72,8 +72,4 @@ class TestTranslatorPlugin:
 
         assert result["new_page_id"] == "new-page-id"
         assert result["translated_content"] == translated
-        # Verify _call was invoked (page creation)
-        mock_client._call.assert_called_once()
-        # Verify the call used pages.create
-        call_args = mock_client._call.call_args
-        assert call_args[0][0] == mock_client._client.pages.create
+        mock_client.create_page.assert_called_once()

@@ -118,4 +118,3 @@ class OrphanDetectorPlugin:
         }
 
 
-PLUGIN_CLASS = OrphanDetectorPlugin

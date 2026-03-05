@@ -63,7 +63,7 @@ class ReleaseNotesPlugin:
         if create_page and parent_page_id:
             page_title = f"릴리즈 노트 {version}" if version else "릴리즈 노트"
             try:
-                page = client._client.pages.create(
+                page = client.create_page(
                     parent={"page_id": parent_page_id},
                     properties={
                         "title": {
@@ -98,4 +98,3 @@ class ReleaseNotesPlugin:
         }
 
 
-PLUGIN_CLASS = ReleaseNotesPlugin

@@ -67,7 +67,7 @@ class TranslatorPlugin:
                 ],
             }
             try:
-                new_page = client._call(client._client.pages.create, **new_page_data)
+                new_page = client.create_page(**new_page_data)
                 new_page_id = new_page.get("id")
             except Exception as exc:
                 return {
@@ -86,4 +86,3 @@ class TranslatorPlugin:
         }
 
 
-PLUGIN_CLASS = TranslatorPlugin

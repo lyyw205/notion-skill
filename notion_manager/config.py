@@ -39,6 +39,8 @@ class SearchSettings(BaseSettings):
     top_k: int = 5
 
 
+# Deprecated: Settings class is not used by load_config() which returns raw dict.
+# Kept for potential future Pydantic-based config migration.
 class Settings(BaseSettings):
     notion_token: str = Field(default="", alias="NOTION_TOKEN")
     anthropic_api_key: str = Field(default="", alias="ANTHROPIC_API_KEY")
@@ -47,7 +49,6 @@ class Settings(BaseSettings):
     cache: CacheSettings = Field(default_factory=CacheSettings)
     backup: BackupSettings = Field(default_factory=BackupSettings)
     search: SearchSettings = Field(default_factory=SearchSettings)
-    enabled_plugins: list[str] = Field(default_factory=list)
 
     model_config = {"populate_by_name": True, "extra": "ignore"}
 

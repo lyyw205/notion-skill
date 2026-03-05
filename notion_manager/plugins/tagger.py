@@ -54,4 +54,3 @@ class TaggerPlugin:
         return {"page_id": page_id, "tags": tags, "updated": updated}
 
 
-PLUGIN_CLASS = TaggerPlugin

@@ -126,4 +126,3 @@ class HierarchyOptimizerPlugin:
         return {"stats": stats, "suggestions": suggestions}
 
 
-PLUGIN_CLASS = HierarchyOptimizerPlugin

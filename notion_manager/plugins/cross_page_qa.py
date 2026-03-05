@@ -82,4 +82,3 @@ class CrossPageQAPlugin:
         }
 
 
-PLUGIN_CLASS = CrossPageQAPlugin

@@ -32,4 +32,3 @@ class AutoSorterPlugin:
         }
 
 
-PLUGIN_CLASS = AutoSorterPlugin

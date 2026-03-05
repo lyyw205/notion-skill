@@ -46,6 +46,20 @@ class AIProvider:
                     delay *= self._backoff_factor
         raise last_exc  # type: ignore[misc]
 
+    def _complete_structured(self, prompt: str, fallback: Any = None) -> Any:
+        """Send a prompt expecting JSON and return the parsed result."""
+        import json
+        raw = self._complete(prompt).strip()
+        # Try to extract JSON object or array
+        for open_ch, close_ch in [("{", "}"), ("[", "]")]:
+            try:
+                start = raw.index(open_ch)
+                end = raw.rindex(close_ch) + 1
+                return json.loads(raw[start:end])
+            except (ValueError, json.JSONDecodeError):
+                continue
+        return fallback if fallback is not None else {"raw": raw}
+
     # ------------------------------------------------------------------
     # Public task methods
     # ------------------------------------------------------------------

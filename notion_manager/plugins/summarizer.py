@@ -92,4 +92,3 @@ class SummarizerPlugin:
         return {"page_id": page_id, "summary": summary, "inserted": inserted}
 
 
-PLUGIN_CLASS = SummarizerPlugin

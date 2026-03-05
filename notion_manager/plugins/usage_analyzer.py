@@ -81,4 +81,3 @@ class UsageAnalyzerPlugin:
         }
 
 
-PLUGIN_CLASS = UsageAnalyzerPlugin

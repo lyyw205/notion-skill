@@ -76,4 +76,3 @@ class ContentExpanderPlugin:
         }
 
 
-PLUGIN_CLASS = ContentExpanderPlugin

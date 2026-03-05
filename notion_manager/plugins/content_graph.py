@@ -89,4 +89,3 @@ class ContentGraphPlugin:
         }
 
 
-PLUGIN_CLASS = ContentGraphPlugin

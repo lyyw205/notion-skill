@@ -61,4 +61,3 @@ class BulkUpdaterPlugin:
         }
 
 
-PLUGIN_CLASS = BulkUpdaterPlugin

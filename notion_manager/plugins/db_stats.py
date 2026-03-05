@@ -82,4 +82,3 @@ class DBStatsPlugin:
         }
 
 
-PLUGIN_CLASS = DBStatsPlugin

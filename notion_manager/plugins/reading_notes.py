@@ -53,4 +53,3 @@ class ReadingNotesPlugin:
         }
 
 
-PLUGIN_CLASS = ReadingNotesPlugin

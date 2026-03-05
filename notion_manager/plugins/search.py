@@ -162,4 +162,3 @@ class SearchPlugin:
         return {"question": question, "answer": answer, "sources": sources}
 
 
-PLUGIN_CLASS = SearchPlugin

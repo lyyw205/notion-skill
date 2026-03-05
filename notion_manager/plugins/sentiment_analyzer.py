@@ -87,4 +87,3 @@ class SentimentAnalyzerPlugin:
         return {"error": "page_id or database_id required"}
 
 
-PLUGIN_CLASS = SentimentAnalyzerPlugin

@@ -81,4 +81,3 @@ class AutoArchiverPlugin:
         return result
 
 
-PLUGIN_CLASS = AutoArchiverPlugin

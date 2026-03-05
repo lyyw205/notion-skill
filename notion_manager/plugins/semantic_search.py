@@ -54,4 +54,3 @@ class SemanticSearchPlugin:
         }
 
 
-PLUGIN_CLASS = SemanticSearchPlugin

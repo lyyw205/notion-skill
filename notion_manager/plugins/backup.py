@@ -153,4 +153,3 @@ class BackupPlugin:
         return "\n".join(lines)
 
 
-PLUGIN_CLASS = BackupPlugin

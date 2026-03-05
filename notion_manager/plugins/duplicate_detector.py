@@ -77,4 +77,3 @@ class DuplicateDetectorPlugin:
         }
 
 
-PLUGIN_CLASS = DuplicateDetectorPlugin

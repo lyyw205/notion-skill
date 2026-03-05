@@ -91,4 +91,3 @@ class KeywordAnalyzerPlugin:
         }
 
 
-PLUGIN_CLASS = KeywordAnalyzerPlugin

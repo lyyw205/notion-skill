@@ -11,9 +11,9 @@ class TestMeetingTemplatePlugin:
         self.config = {}
 
     def test_create_meeting(self):
-        """Mock pages.create; verify created_page_id and title."""
+        """Mock create_page; verify created_page_id and title."""
         mock_client = MagicMock()
-        mock_client._client.pages.create.return_value = {"id": "meeting-page-id"}
+        mock_client.create_page.return_value = {"id": "meeting-page-id"}
 
         result = self.plugin.execute(
             mock_client,
@@ -26,7 +26,7 @@ class TestMeetingTemplatePlugin:
 
         assert result.get("created_page_id") == "meeting-page-id"
         assert result.get("title") == "Sprint Planning"
-        mock_client._client.pages.create.assert_called_once()
+        mock_client.create_page.assert_called_once()
 
     def test_missing_parent(self):
         """No parent_page_id should return error."""

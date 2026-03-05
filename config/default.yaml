@@ -59,3 +59,15 @@ plugins:
     - semantic_search
     - cross_page_qa
     - page_recommender
+    # Phase 6
+    - deadline_alerter
+    - property_normalizer
+    - recurring_task_generator
+    - page_quality_checker
+    - changelog_tracker
+    - relation_linker
+    # Phase 7
+    - status_reporter
+    - page_merger
+    - content_scheduler
+    - workspace_health_dashboard

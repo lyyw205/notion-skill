@@ -90,7 +90,7 @@ class FAQGeneratorPlugin:
                     },
                 })
             try:
-                page = client._client.pages.create(
+                page = client.create_page(
                     parent={"page_id": parent_page_id},
                     properties={
                         "title": {
@@ -115,4 +115,3 @@ class FAQGeneratorPlugin:
         }
 
 
-PLUGIN_CLASS = FAQGeneratorPlugin
