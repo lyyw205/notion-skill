@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"python3 -m pytest tests/test_plugins/test_template_generator.py tests/test_plugins/test_daily_journal.py tests/test_plugins/test_meeting_template.py tests/test_plugins/test_weekly_review.p...",
+  "error": "Exit code 1\n/usr/bin/python3: No module named pytest\n\n/usr/bin/python3: No module named pytest",
+  "timestamp": "2026-03-05T03:45:12.176Z",
+  "retry_count": 2
+}

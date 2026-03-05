@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "notion-auto-manager"
+version = "0.1.0"
+description = "AI-powered Notion workspace manager"
+requires-python = ">=3.12"
+dependencies = [
+    "notion-client>=2.2.0",
+    "anthropic>=0.40.0",
+    "click>=8.1.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "pyyaml>=6.0",
+    "chromadb>=0.5.0",
+    "apscheduler>=3.10.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+]
+
+[project.scripts]
+notion-manager = "notion_manager.cli:cli"
+
+[tool.setuptools.packages.find]
+include = ["notion_manager*"]

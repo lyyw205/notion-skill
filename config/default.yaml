@@ -1,0 +1,61 @@
+notion:
+  rate_limit:
+    max_requests_per_second: 3
+    retry_max_attempts: 5
+    retry_base_delay: 1.0
+
+ai:
+  model: "claude-sonnet-4-20250514"
+  max_tokens: 4096
+
+cache:
+  db_path: "cache.db"
+  ttl_hours: 24
+
+backup:
+  output_dir: "backups"
+  format: "markdown"  # markdown | json
+
+search:
+  collection_name: "notion_pages"
+  embedding_model: "all-MiniLM-L6-v2"
+  top_k: 5
+
+plugins:
+  enabled:
+    - summarizer
+    - tagger
+    - search
+    - backup
+    - task_analyzer
+    - duplicate_detector
+    - empty_detector
+    - auto_archiver
+    - hierarchy_optimizer
+    - auto_sorter
+    - bulk_updater
+    - orphan_detector
+    - meeting_summarizer
+    - digest_generator
+    - db_stats
+    - project_summarizer
+    - reading_notes
+    - bullet_converter
+    - content_expander
+    - translator
+    - sentiment_analyzer
+    - usage_analyzer
+    - keyword_analyzer
+    - content_graph
+    - writing_habit_analyzer
+    - db_health_checker
+    - goal_tracker
+    - template_generator
+    - daily_journal
+    - meeting_template
+    - weekly_review
+    - faq_generator
+    - release_notes
+    - semantic_search
+    - cross_page_qa
+    - page_recommender
